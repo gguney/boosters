@@ -1,0 +1,128 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Redirect;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use GGuney\Boosters\ControllerBooster;
+use GGuney\Boosters\ComponentBooster;
+
+class {BOOSTED_CONTROLLER_NAME} extends Controller{
+
+    /**
+     * Controller Booster class for simplified actions.
+     */
+    use ControllerBooster, ComponentBooster;
+
+    /**
+     * Constructor. Register DataModel for booster to create views.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //$this->middleware('auth');
+        $this->setDM(new \App\DataModels\{DM_NAME}());
+    }
+    
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {   
+        $items = \App\Models\{MODEL_NAME}::all();
+        $slot = $this->addTable($this->DM, $items)->addBreak()->get();
+        $DM = $this->DM;
+        return View('layouts.bapp', compact('slot', 'DM'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $this->DM->setForeignsData();
+        return View('vendor.boosters.bodies.form')->with(['DM' => $this->DM]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        return $this->storeAction($request, $this->DM);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $item = \App\Models\{MODEL_NAME}::find($id);
+        return View('vendor.boosters.bodies.show')->with(['DM' => $this->DM, 'item' => $item]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $item = \App\Models\{MODEL_NAME}::find($id);
+        $this->DM->setForeignsData();
+        return View('vendor.boosters.bodies.form')->with(['DM' => $this->DM, 'item' => $item]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $item = \App\Models\{MODEL_NAME}::find($id);
+        return $this->updateAction($request, $this->DM, $item);
+    }
+
+    /**
+     * Display the delete message.
+     *
+     * @param  int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function delete($id)
+    {
+        return View('vendor.boosters.bodies.delete');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        return $this->destroyAction($this->DM, $id);
+    }
+}

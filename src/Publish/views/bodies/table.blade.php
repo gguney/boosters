@@ -1,0 +1,1 @@
+{!! Barista::buildTableFromDM($DM, $items) !!}

@@ -1,0 +1,1 @@
+{!! Barista::buildShowFromDM($DM, $item) !!}
